@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import { StyleSheet, Text, View, Switch } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/HeaderButton";
 import Colors from "../constants/colors";
 import FilterSwitch from "../components/FilterSwitch";
+import { setFilters } from "../store/actions/meals";
 
 const FiltersScreen = props => {
   const { navigation } = props;
@@ -12,18 +14,19 @@ const FiltersScreen = props => {
   const [isVegan, setIsVegan] = useState(false);
   const [isVegitarian, setIsVegitarian] = useState(false);
 
+  const dispatch = useDispatch();
   // wrapping save filters in useCallback ensure that
   // saveFilters only updates when the state changes
   const saveFilters = useCallback(() => {
     const appliedFilters = {
-      glucoseFree: isGlutenFree,
+      glutenFree: isGlutenFree,
       lactoseFree: isLactoseFree,
       vegan: isVegan,
       vegitarian: isVegitarian
     };
-    console.log(appliedFilters);
-    return appliedFilters;
-  }, [isGlutenFree, isLactoseFree, isVegan, isVegitarian]);
+    dispatch(setFilters(appliedFilters));
+    navigation.navigate({ routeName: "Categories" });
+  }, [isGlutenFree, isLactoseFree, isVegan, isVegitarian, dispatch]);
 
   // Everytime saveFilters is changed it resends the Param "save"
   useEffect(() => {
@@ -60,6 +63,7 @@ const FiltersScreen = props => {
   );
 };
 
+// Navigation Options
 FiltersScreen.navigationOptions = navData => {
   return {
     headerTitle: "Filter Meals",

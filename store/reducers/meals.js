@@ -1,13 +1,53 @@
 import { MEALS } from "../../data/dummy-data";
+import * as actionTypes from "../actions/meals";
 
 const initialState = {
   meals: MEALS,
   filteredMeals: MEALS,
-  favoriteMeaks: []
+  favoriteMeals: []
 };
 
 const mealReducer = (state = initialState, action) => {
-  return state;
+  switch (action.type) {
+    case actionTypes.TOGGLE_FAVORITE:
+      // check if it is in the array already
+      const existingIndex = state.favoriteMeals.findIndex(
+        meal => meal.id === action.mealId
+      );
+
+      if (existingIndex >= 0) {
+        const updatedFavMeals = [...state.favoriteMeals];
+        updatedFavMeals.splice(existingIndex, 1);
+        return { ...state, favoriteMeals: updatedFavMeals };
+      } else {
+        const newFavMeal = state.meals.find(meal => meal.id === action.mealId);
+        return {
+          ...state,
+          favoriteMeals: state.favoriteMeals.concat(newFavMeal)
+        };
+      }
+    case actionTypes.SET_FILTERS:
+      const appliedFilters = action.filters;
+      // Check each meal for filter and return true at end if it passes all checks
+      const updatedFilteredMeals = state.meals.filter(meal => {
+        if (appliedFilters.glutenFree && !meal.isGlutenFree) {
+          return false;
+        }
+        if (appliedFilters.lactoseFree && !meal.isLactoseFree) {
+          return false;
+        }
+        if (appliedFilters.vegan && !meal.isVegan) {
+          return false;
+        }
+        if (appliedFilters.vegitarian && !meal.isVegetarian) {
+          return false;
+        }
+        return true;
+      });
+      return { ...state, filteredMeals: updatedFilteredMeals };
+    default:
+      return state;
+  }
 };
 
 export default mealReducer;
