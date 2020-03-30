@@ -66,6 +66,7 @@ const FilterNavigator = createStackNavigator(
     Filters: FiltersScreen
   },
   {
+    // *** JUST REFERENCE FOR DIFFERENT OPTION TO SET
     // navigationOptions: {
     //   drawerLabel: "FILTERS!!"
     // },

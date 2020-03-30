@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Switch } from "react-native";
 import Colors from "../constants/colors";
 
 const FilterSwitch = props => {
-  //   const [isActive, setIsActive] = useState(false);
   return (
     <View style={styles.filterContainer}>
       <Text style={styles.filterLabel}>{props.label}</Text>
